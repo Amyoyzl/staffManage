@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dept</title>
+    <style media="screen">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 1em 0;
+            text-align: center;
+            background-color: #69c;
+            color: #fff;
+            font-size: 300%;
+        }
+        
+        header span {
+            font-size: 50%;
+            margin-left: 1em;
+            color: #eee;
+        }
+        
+        footer {
+            position: absolute;
+            bottom: 0;
+            padding: 2em 0;
+            text-align: center;
+            background-color: #69c;
+            color: #fff;
+            width: 100%;
+            clear: both;
+        }
+        
+        .content {
+            width: 75%;
+            overflow: auto;
+            float: right;
+            min-height: 300px;
+        }
+        
+        .nav {
+            float: left;
+            background-color: #eee;
+            width: 25%;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin-top: 1em;
+        }
+        
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 0 8px 16px;
+            text-decoration: none;
+        }
+        
+        li a:hover {
+            background-color: #69c;
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2m auto;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #cfc;
+        }
+        
+        .btn{
+            color: red;
+        }
+    </style>
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $.ajax({
+                method: 'GET',
+                url: 'dept'
+            })
+            .done((data)=>{
+                // 显示部门列表
+                let tb = $('#tb');
+                for(let d of data){
+                    let tr = $('<tr>');
+                    
+                    // 显示所有员工信息
+                    let staffsbtn = $('<button>').text('员工信息');
+                    // 编辑按钮
+                    let editbtn = $('<button>').text('编辑').on('click',function(){
+                        $.ajax({
+                            method: 'GET',
+                            url: 'dept/'+d.id,
+                        })
+                        .done((data) => {
+                            let etitle = $('<input>').val(d.title);
+                            let eloc = $('<input>').val(d.loc);
+                            let savebtn = $('<button>').text('保存');
+                            tr.after($('<tr>')
+                                .append($('<td>').text(d.id))
+                                .append($('<td>').append(etitle))
+                                .append($('<td>').append(eloc))
+                                .append($('<td>').append(
+                                    savebtn.on('click',()=>{
+                                        $.ajax({
+                                            method: 'PUT',
+                                            url: 'dept/' + d.id,
+                                            data: {
+                                                title: etitle.val(),
+                                                loc: eloc.val()
+                                            }
+                                        })
+                                        .done(()=>{
+                                            tr.find('td').eq(1).text(etitle.val());
+                                            tr.find('td').eq(2).text(eloc.val());
+                                            tr.show();
+                                            tr.next().remove();
+                                        });
+                                    })
+                                ))
+                            );
+                            tr.hide();
+                        });
+                    });
+
+                    // 删除按钮
+                    let removebtn = $('<button>').text('删除');
+
+                    tr
+                        .append('<td>'+ d.id +'</td>')
+                        .append('<td>'+ d.title +'</td>')
+                        .append('<td>'+ d.loc +'</td>')
+                        .append($('<td>').append(staffsbtn))
+                        .append($('<td>').append(editbtn))
+                        .append($('<td>').append(removebtn));
+                    tb.append(tr);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+	<header>
+		人力资源管理<span>员工信息列表</span>
+	</header>
+	<div class="nav">
+		<ul>
+			<li><a href="staff.html">添加员工</a></li>
+            <li><a href="dept.html">部门信息</a></li>
+            <li><a href="#">其他</a></li>
+		</ul>
+	</div>
+	<div class="content">
+		<table id="tb">
+			<tr>
+				<th>编号</th>
+				<th>名称</th>
+                <th>地址</th>
+                <th>员工信息</th>
+				<th>编辑</th>
+				<th>删除</th>
+            </tr>
+        </table>
+	</div>
+	<footer>Copyright (c) 2016 牛耳教育 All Rights Reserved.</footer>
+</body>
+</html>

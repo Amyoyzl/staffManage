@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style media="screen">
+* {
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	padding: 1em 0;
+	text-align: center;
+	background-color: #69c;
+	color: #fff;
+	font-size: 300%;
+}
+
+header span {
+	font-size: 50%;
+	margin-left: 1em;
+	color: #eee;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	padding: 2em 0;
+	text-align: center;
+	background-color: #69c;
+	color: #fff;
+	width: 100%;
+	clear: both;
+}
+
+.content {
+	width: 75%;
+	overflow: auto;
+	float: right;
+	min-height: 300px;
+}
+
+.nav {
+	float: left;
+	background-color: #eee;
+	width: 25%;
+	position: fixed;
+	height: 100%;
+	overflow: auto;
+}
+
+ul {
+	list-style-type: none;
+	margin-top: 1em;
+}
+
+li a {
+	display: block;
+	color: #000;
+	padding: 8px 0 8px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	background-color: #69c;
+	color: white;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 2m auto;
+}
+
+th, td {
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #cfc;
+}
+
+.btn{
+	color: red;
+}
+</style>
+<title>staff</title>
+<!-- jQuery -->
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	
+	// ajax get /staff
+	$.ajax({
+		  method: "GET",
+		  url: "staff",
+		  data: { size: 5, offset: 0 }
+		})
+		  .done(function( data ) {
+		    	//console.log(data);	  
+		    	let tb = $('#tb');
+		    	for (let s of data) {
+		    		let tr = $('<tr>');
+		    		
+		    		// 编辑按钮
+		    		let btnEdit = $('<button>').text('编辑').addClass('btn').on('click',function(){
+		    			$.ajax({
+		    				method: 'GET',
+		    				url: 'staff/'+ s.id,
+		    				data: {}
+		    			})
+		    			.done((data) => {
+		    			//	console.log(data);
+		    				let editJob = $('<input>').val(s.job);
+		    				let editName = $('<input>').val(s.name);
+		    				let editPhone = $('<input>').val(s.phone);
+		    				let editEmail = $('<input>').val(s.email);
+		    				tr.after($('<tr>')
+		    						.append($('<td>').append($('<input>').val(s.id)))
+		    						.append($('<td>').append(editName))
+		    						.append($('<td>').append(editJob))
+		    						.append($('<td>').append(editPhone))
+		    						.append($('<td>').append(editEmail))
+		    						.append($('<td>').append(
+		    								$('<button>').text('save')
+		    								.on('click',()=>{
+		    									
+		    									$.ajax({
+		    										url: 'staff/' + s.id,
+		    										method: 'PUT',
+		    										data: {
+		    											phone: editPhone.val(),
+		    											email: editEmail.val(),
+		    											job: editJob.val()
+		    										}
+		    									})
+		    									.done(()=>{
+		    										tr.find('td').eq(2).text(editJob.val());
+		    										tr.find('td').eq(3).text(editPhone.val());
+		    										tr.find('td').eq(4).text(editEmail.val());
+		    										tr.show();
+		    										tr.next().remove();
+		    									});
+		    								})
+		    						))
+		    				);
+		    				tr.hide();
+		    			})
+		    			.fail(() => {console.log('fail')});
+		    			
+		    		});
+		    		
+		    		// 删除按钮
+		    		let remove = $('<button>').text('删除').on('click', function() {
+		    			//alert('remove ' + s.id);
+		    			
+		    			$.ajax({
+		    				method: 'DELETE',
+		    				url: 'staff/' + s.id
+		    			}).done(function(res) {
+		    				// 从页面删除
+		    				console.log(res);
+		    				tr.remove();
+		    			});
+		    			
+		    		});
+		    		
+		    		tr
+		    			.append('<td>'+s.id+'</td>')
+		    			.append('<td>'+s.name+'</td>')
+		    			.append('<td>'+s.job+'</td>')
+		    			.append('<td>'+s.phone+'</td>')
+		    			.append('<td>'+s.email+'</td>')
+		    			.append($('<td>').append(btnEdit))
+		    			.append($('<td>').append(remove));
+		    		tb.append(tr);
+		    	}
+		  });	
+	});
+
+</script>
+</head>
+
+<body>
+	<header>
+		人力资源管理<span>员工信息列表</span>
+	</header>
+	<div class="nav">
+		<ul>
+			<li><a href="staff.html">添加员工</a></li>
+			<li><a href="dept.html">部门信息</a></li>
+			<li><a href="#">其他</a></li>
+		</ul>
+	</div>
+	<div class="content">
+		<table id="tb">
+			<tr>
+				<th>编号</th>
+				<th>姓名</th>
+				<th>职位</th>
+				<th>电话</th>
+				<th>电子邮件</th>
+				<th>编辑</th>
+				<th>删除</th>
+			</tr>
+
+		</table>
+
+	</div>
+	<footer>Copyright (c) 2016 牛耳教育 All Rights Reserved.</footer>
+</body>
+</html>

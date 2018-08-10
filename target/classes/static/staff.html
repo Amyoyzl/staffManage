@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#btnSave').on('click',function(){
+			// 发送post请求
+			let req = $.ajax({
+				method: 'POST',
+				url: 'staff',
+				data: {
+					name: $('#name').val(),
+					job: $('#job').val(),
+					phone: $('#phone').val(),
+					email: $('#email').val()
+				}
+			});
+			// 请求成功执行
+			req.done(function(data){
+				console.log("done: ");
+				
+			});
+			// 请求失败
+			req.fail(function(){
+				console.log("fail");
+			});
+		})
+	});
+</script>
+</head>
+<body>
+	
+	<button id="btnSave">创建</button>
+	
+	<!-- 表单的形式传递数据 -->
+	<form action="staff" method="post">
+		<input id="name" name="name" value="jack">
+		<input id="job" name="job" value="product">
+		<input id="email" name="email" value="jack@test.com">
+		<input id="phone" name="phone" value="15266666666">
+		<input type="submit" value="提交">
+	</form>
+</body>
+</html>

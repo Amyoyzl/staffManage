@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: Amy_o
+Build-Jdk: 10.0.1
+Implementation-Title: staffManage
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.oyzl
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/staffManage
+Created-By: Maven Integration for Eclipse
+

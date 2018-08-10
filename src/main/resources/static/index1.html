@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">  
+    
+    <style>
+        .li_on{
+            background: #007bff;
+        }
+    </style>
+    
+  </head>
+  <body>
+
+    <div class="jumbotron jumbotron-fluid p-3">
+        <div class="container">
+            <h1 class="display-3" id="app">app name</h1>
+            <p class="lead">Spring Boot - Bootstrap</p>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-sm-12">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">员工</a>
+                    <a href="#" class="list-group-item list-group-item-action">部门</a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">其他</a>
+                </div>
+            </div>
+            <div class="col-lg-9 col-sm-12">
+                <div class="row">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createStaff">
+                        添加新员工
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="createStaff" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="modelTitleId">添加新员工</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="">姓名</label>
+                                        <input type="text" class="form-control"
+                                            name="name" id="addname" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">职位</label>
+                                        <input type="text" class="form-control"
+                                            name="job" id="addjob" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">手机</label>
+                                        <input type="text" class="form-control"
+                                            name="phone" id="addphone" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">电子邮件</label>
+                                        <input type="text" class="form-control"
+                                            name="email" id="addemail" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">部门</label>
+                                        <select class="form-control" name="dept" id="adddept">
+                                            <!-- <option>研发</option>
+                                            <option>产品</option>
+                                            <option>测试</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" id="addStaff">创建</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                </div>
+
+                <!-- 表格 -->
+                <table class="table mt-3 text-center">
+                   <thead>
+                       <tr class="text-center">
+                           <th>编号</th>
+                           <th>姓名</th>
+                           <th>手机</th>
+                           <th>部门</th>
+                           <th>工作地点</th>
+                           <th style="width: 20%;">操作</th>
+                       </tr>
+                   </thead>
+                   <tbody id="stafftb">
+                      
+                   </tbody>
+                 </table>
+
+               <!-- 分页面 -->
+            <nav aria-label="Page navigation example" id="pages_nav">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled" id="prev">
+                        <a class="page-link" href="#" id="prevPage">上一页</a>
+                    </li>
+                    <!-- <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li> -->
+                    <li class="page-item" id="last">
+                        <a class="page-link" href="#" id="lastPage">下一页</a>
+                    </li>
+                </ul>
+            </nav>
+
+            </div>
+        </div>
+    </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    
+    <!-- JS -->
+    <script>
+        $(function () {
+            $('#app').text('人力资源管理');
+
+            let limit = 3;
+            let offset = 0;
+            let page = 1;
+            let pages = 0;
+
+            // 显示员工信息 
+            $.ajax({
+		        method: "GET",
+		        url: "staff/page",
+		        data: { l:limit, o:offset }
+		    })
+            .done((data)=>{
+                let tb = $('#stafftb');
+		    	for (let s of data) {
+		    		let tr = $('<tr>');   	
+                    let btnEdit = $('<button>').text('编辑').addClass('btn btn-primary mr-3');	
+                    let btnRemove = $('<button>').text('删除').addClass('btn btn-danger');	
+		    		tr
+		    			.append('<td>'+s.id+'</td>')
+		    			.append('<td>'+s.name+'</td>')
+		    			.append('<td>'+s.phone+'</td>')
+		    			.append('<td>'+s.dept.title+'</td>')
+		    			.append('<td>'+s.dept.loc+'</td>')
+                        .append($('<td>').append(btnEdit).append(btnRemove));
+		    		tb.append(tr);
+		    	}
+            });
+
+            // 分页显示数字
+            $.ajax({
+                method: "GET",
+		        url: "staff/getpage",
+		        data: { l: limit}
+            })
+            .done((data)=>{
+                pages = data;
+                let pli = $('#prev');
+                for(let i=1; i <= pages; i++) {
+                    let li = $('<li>').addClass('page-item');
+                    li.append($('<a>').addClass('page-link').text(i));
+                    pli.after(li);
+                    pli = li;
+                }
+            })
+            .fail(()=>{
+                console.log('fail');
+            });
+
+            // 上一页
+            $('#prevPage').on('click',()=>{
+                page --;
+                offset -= limit;
+                if(page==1){
+                    $('#prev').addClass('disabled');
+                }
+                $('#pages_ul').children().eq(page).addClass('li_on');
+                $('#pages_ul').children().eq(page+1).removeClass('li_on');
+                // 删除之前的信息
+                $('#stafftb').text('');
+                // 显示员工信息 
+                $.ajax({
+                    method: "GET",
+                    url: "staff/page",
+                    data: { l:limit, o:offset }
+                })
+                .done((data)=>{
+                    let tb = $('#stafftb');
+                    for (let s of data) {
+                        let tr = $('<tr>');   	
+                        let btnEdit = $('<button>').text('编辑').addClass('btn btn-primary mr-3');	
+                        let btnRemove = $('<button>').text('删除').addClass('btn btn-danger');	
+                        tr
+                            .append('<td>'+s.id+'</td>')
+                            .append('<td>'+s.name+'</td>')
+                            .append('<td>'+s.phone+'</td>')
+                            .append('<td>'+s.dept.title+'</td>')
+                            .append('<td>'+s.dept.loc+'</td>')
+                            .append($('<td>').append(btnEdit).append(btnRemove));
+                        tb.append(tr);
+                    }
+                });
+            });
+
+            if(page>1&&page<pages){
+                $('#prev').removeClass('disabled');
+                $('#last').removeClass('disabled');
+            }
+        
+            // 下一页
+            $('#lastPage').on('click',()=>{
+                page ++;
+                offset += limit;
+                if(page==pages){
+                    $('#last').addClass('disabled');
+                }
+                $('#pages_ul').children().eq(page).addClass('li_on');
+                $('#pages_ul').children().eq(page-1).removeClass('li_on');
+                // 删除之前的信息
+                $('#stafftb').text('');
+                // 显示员工信息 
+                $.ajax({
+                    method: "GET",
+                    url: "staff/page",
+                    data: { l:limit, o:offset }
+                })
+                .done((data)=>{
+                    let tb = $('#stafftb');
+                    for (let s of data) {
+                        let tr = $('<tr>');   	
+                        let btnEdit = $('<button>').text('编辑').addClass('btn btn-primary mr-3');	
+                        let btnRemove = $('<button>').text('删除').addClass('btn btn-danger');	
+                        tr
+                            .append('<td>'+s.id+'</td>')
+                            .append('<td>'+s.name+'</td>')
+                            .append('<td>'+s.phone+'</td>')
+                            .append('<td>'+s.dept.title+'</td>')
+                            .append('<td>'+s.dept.loc+'</td>')
+                            .append($('<td>').append(btnEdit).append(btnRemove));
+                        tb.append(tr);
+                    }
+                });
+            });
+
+            // 显示部门options
+            $.ajax({
+                method: 'GET',
+                url: 'dept/info',
+                data: {}
+            }).done((data)=>{
+                let options = $('#adddept');
+                for(let d of data){
+                    let option = $('<option>').val(d.id).text(d.title);
+                    options.append(option);
+                }
+            });
+
+            // 添加员工
+            $('#addStaff').on('click',()=>{
+                $.ajax({
+                    method: 'POST',
+                    url: 'staff/add',
+                    data: {
+                        name: $('#addname').val(),
+                        job: $('#addjob').val(),
+                        phone: $('#addphone').val(),
+                        email: $('#addemail').val(),
+                        dept: { 
+                        	id:$('#adddept option:selected').val(),
+                        	title: '',
+                        	loc: ''
+                        }
+                    }
+                }).done(()=>{
+                    $('#createStaff').hide();
+                    console.log(data);
+                    console.log($('#adddept option:selected').val());
+                }).fail(()=>{
+                    console.log($('#adddept option:selected').val());
+                });
+            });
+
+        });
+    </script>
+
+  </body>
+</html>
